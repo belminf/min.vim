@@ -2,7 +2,12 @@
 if exists('g:MinLoaded') || &cp
   finish
 end
-:let g:MinLoaded = 1
+" Leaving off while debug
+" :let g:MinLoaded = 1
+
+" Requirements
+" `date` in path
+
 
 " :OpenMin <category> [date]
 function! s:OpenMin(cat, ...)
