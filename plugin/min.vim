@@ -12,7 +12,7 @@ end
 " :OpenMin <category> [date]
 function! s:OpenMin(cat, ...)
 
-    " Get date, default to today
+    " Get params, default date to today
     let date = (a:0 >= 1) ? a:1 : "today"
     let cat = a:cat
 
@@ -25,7 +25,8 @@ function! s:OpenMin(cat, ...)
 
     " TODO: configurable path, not ~/notes
     " TODO: configurable ext, not .md
-    execute "edit ~/notes/" . cat . "/" . converted_date . ".md"
+    " TODO: check if cat exists or not, confirm
+    execute "edit ~/notes/mins" . cat . "/" . converted_date . ".md"
 
 endfunction
 command! -nargs=+ OpenMin call <SID>OpenMin(<f-args>)
