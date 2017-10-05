@@ -56,7 +56,7 @@ function! s:OpenMin(cat, ...) abort
 
     " TODO: configurable ext, not .md
     " TODO: check if cat exists or not, confirm
-    execute "edit ~/notes/mins" . cat . "/" . converted_date . ".md"
+    execute "edit ~/notes/mins/" . cat . "/" . converted_date . ".md"
 
 endfunction
 
