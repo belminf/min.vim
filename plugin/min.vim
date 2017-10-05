@@ -71,8 +71,23 @@ function! s:OpenRef(title)
 
 endfunction
 
+function! s:ListFU()
+    
+    " Get directory
+    let notes_dir = <SID>GetNotesDir()
+    if notes_dir == ""
+	return
+    endif
+
+    execute "silent vimgrep! /#FU/j " . notes_dir . "\**"
+    execute "copen"
+
+endfunction
+
+
+
 " Commands
 command! -nargs=+ OpenMin call <SID>OpenMin(<f-args>)
 command! -nargs=1 OpenRef call <SID>OpenRef(<f-args>)
-
+command! -nargs=0 ListFU call <SID>ListFU()
 
