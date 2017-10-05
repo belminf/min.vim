@@ -34,14 +34,22 @@ function! s:GetNotesDir() abort
 
 endfunction
 
+function! s:GetExt() abort
+    
+    " TODO: Configurable extension
+    return ".md"
+
+endfunction
+
 " :OpenMin <category> [date]
 function! s:OpenMin(cat, ...) abort
 
-    " Get params, default date to today
+    " Params
     let date = (a:0 >= 1) ? a:1 : "today"
     let cat = a:cat
 
-    " Get directory
+    " Config
+    let ext = <SID>GetExt()
     let notes_dir = <SID>GetNotesDir()
     if notes_dir == ""
 	return
@@ -54,20 +62,26 @@ function! s:OpenMin(cat, ...) abort
 	return
     endif
 
-    " TODO: configurable ext, not .md
     " TODO: check if cat exists or not, confirm
-    execute "edit ~/notes/mins/" . cat . "/" . converted_date . ".md"
+    execute "edit " . notes_dir . "/mins/" . cat . "/" . converted_date . ext
 
 endfunction
 
 " :OpenRef <title> 
 function! s:OpenRef(title)
 
+    " Params
     let title = a:title
 
-    " TODO: configurable path, not ~/notes
-    " TODO: configurable ext, not .md
-    execute "edit ~/notes/refs/" . title . ".md"
+    " Config
+    let ext = <SID>GetExt()
+    let notes_dir = <SID>GetNotesDir()
+    if notes_dir == ""
+	return
+    endif
+
+    " Open ref file
+    execute "edit " . notes_dir . "/refs/" . title . ext
 
 endfunction
 
