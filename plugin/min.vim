@@ -31,9 +31,20 @@ function! s:OpenMin(cat, ...)
 endfunction
 command! -nargs=+ OpenMin call <SID>OpenMin(<f-args>)
 
+" :OpenRef <title> 
+function! s:OpenRef(title)
+
+    let title = a:title
+
+    " TODO: configurable path, not ~/notes
+    " TODO: configurable ext, not .md
+    execute "edit ~/notes/refs/" . title . ".md"
+
+endfunction
+command! -nargs=1 OpenRef call <SID>OpenRef(<f-args>)
+
 
 " TODO: functions
 " list follow-up: [category]
-" open ref: <title>
 " list min: <category>
 " list ref
