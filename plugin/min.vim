@@ -8,6 +8,11 @@ end
 " Requirements
 " `date` in path
 
+" TODO: functions
+" grep notes
+" list follow-up: [category]
+" list min: <category>
+" list ref
 
 " :OpenMin <category> [date]
 function! s:OpenMin(cat, ...)
@@ -29,7 +34,6 @@ function! s:OpenMin(cat, ...)
     execute "edit ~/notes/mins" . cat . "/" . converted_date . ".md"
 
 endfunction
-command! -nargs=+ OpenMin call <SID>OpenMin(<f-args>)
 
 " :OpenRef <title> 
 function! s:OpenRef(title)
@@ -41,10 +45,9 @@ function! s:OpenRef(title)
     execute "edit ~/notes/refs/" . title . ".md"
 
 endfunction
+
+" Commands
+command! -nargs=+ OpenMin call <SID>OpenMin(<f-args>)
 command! -nargs=1 OpenRef call <SID>OpenRef(<f-args>)
 
 
-" TODO: functions
-" list follow-up: [category]
-" list min: <category>
-" list ref
