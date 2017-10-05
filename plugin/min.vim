@@ -62,8 +62,20 @@ function! s:OpenMin(cat, ...) abort
 	return
     endif
 
-    " TODO: check if cat exists or not, confirm
-    execute "edit " . notes_dir . "/mins/" . cat . "/" . converted_date . ext
+    " Compile and check min category dir
+    this_min_dir = notes_dir . "/mins/" . cat . "/"
+
+    if !isdirectory(this_min_dir)
+	let choice = confirm(this_min_dir . ": Category doesn't exist, create it?", "&Yes\n&No", 2)
+	if choice == 1
+	    call mkdir(this_min_dir, "p")
+	else
+	    return ""
+	endif
+    endif
+
+    " Open new min note
+    execute "edit " . this_min_dir . converted_date . ext
 
 endfunction
 
