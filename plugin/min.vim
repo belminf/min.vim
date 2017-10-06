@@ -14,6 +14,30 @@ end
 " list follow-up: [category]
 " list min: <category>
 " list ref
+"
+
+function! s:CheckAndCreateDir(dir, create_prompt) abort
+
+    " If directory exist, just return it
+    if isdirectory(a:dir)
+	return 1
+    endif
+
+    " ASSERT: Directory doesn't exist
+    
+    " Prompt user for choice
+    let choice = confirm(a:dir . ": " . a:create_prompt, "&Yes\n&No", 2)
+
+    " If not creating dir, return
+    if choice != 1
+	return 0
+    endif
+
+    " Create directory and return
+    call mkdir(dir, "p")
+    return 1
+
+endfunction
 
 function! s:GetNotesDir() abort
     
@@ -21,13 +45,8 @@ function! s:GetNotesDir() abort
     let notes_dir = $HOME . "/notes"
 
     " Create if it doesn't exist
-    if !isdirectory(notes_dir)
-	let choice = confirm(notes_dir . ": Doesn't exist, create it?", "&Yes\n&No", 2)
-	if choice == 1
-	    call mkdir(notes_dir, "p")
-	else
-	    return ""
-	endif
+    if !<SID>CheckAndCreateDir(notes_dir, "Doesn't exist, create it?")
+	return ""
     endif
 
     return notes_dir
@@ -63,15 +82,10 @@ function! s:OpenMin(cat, ...) abort
     endif
 
     " Compile and check min category dir
-    this_min_dir = notes_dir . "/mins/" . cat . "/"
+    let this_min_dir = notes_dir . "/mins/" . cat . "/"
 
-    if !isdirectory(this_min_dir)
-	let choice = confirm(this_min_dir . ": Category doesn't exist, create it?", "&Yes\n&No", 2)
-	if choice == 1
-	    call mkdir(this_min_dir, "p")
-	else
-	    return ""
-	endif
+    if !<SID>CheckAndCreateDir(this_min_dir, "Category doesn't exist, create it?")
+	return ""
     endif
 
     " Open new min note
