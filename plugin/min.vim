@@ -96,6 +96,37 @@ function! s:OpenMin(cat, ...) abort
 
 endfunction
 
+function! s:OpenLatestMins(days, ...) abort
+    
+    " Params
+    let days = a:days
+    let ext = <SID>GetExt()
+    let notes_dir = <SID>GetNotesDir()
+
+    " Go through each directory first
+    for this_cat_dir in split(glob(notes_dir . '/mins/*/'), '\n')
+
+	" Go through each day
+	let days_left = days
+	while days_left >= 0
+	    let this_date = substitute(system("date -d '" . days_left . " days ago' +%Y-%m-%d"), '[\r\n]\+$', '', '')
+
+	    let this_min_path = this_cat_dir . this_date . ext
+
+	    " Open file if readable
+	    if filereadable(this_min_path)
+		execute "edit " . this_min_path
+	    endif
+
+	    " Decrement counter
+	    let days_left -= 1
+
+	endwhile
+
+    endfor
+
+endfunction
+
 " :OpenRef <title> 
 function! s:OpenRef(title)
 
@@ -131,5 +162,6 @@ endfunction
 
 " Commands
 command! -nargs=+ OpenMin call <SID>OpenMin(<f-args>)
+command! -nargs=1 OpenLatestMins call <SID>OpenLatestMins(<f-args>)
 command! -nargs=1 OpenRef call <SID>OpenRef(<f-args>)
 command! -nargs=0 ListFU call <SID>ListFU()
