@@ -18,15 +18,18 @@ end
 
 function! s:CheckAndCreateDir(dir, create_prompt) abort
 
+    " Variables
+    let dir = a:dir
+
     " If directory exist, just return it
-    if isdirectory(a:dir)
+    if isdirectory(dir)
 	return 1
     endif
 
     " ASSERT: Directory doesn't exist
     
     " Prompt user for choice
-    let choice = confirm(a:dir . ": " . a:create_prompt, "&Yes\n&No", 2)
+    let choice = confirm(dir . ": " . a:create_prompt, "&Yes\n&No", 2)
 
     " If not creating dir, return
     if choice != 1
@@ -130,4 +133,3 @@ endfunction
 command! -nargs=+ OpenMin call <SID>OpenMin(<f-args>)
 command! -nargs=1 OpenRef call <SID>OpenRef(<f-args>)
 command! -nargs=0 ListFU call <SID>ListFU()
-
