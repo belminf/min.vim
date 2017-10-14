@@ -6,7 +6,7 @@ end
 " :let g:MinLoaded = 1
 
 " Requirements
-" `date` in path
+" `date`, `ls`, `head` in path
 " vim compiled w/ dialog support (for confirm dialog)
 
 " TODO: functions
@@ -77,22 +77,43 @@ function! s:OpenMin(cat, ...) abort
 	return
     endif
 
-    " Convert date
-    let converted_date = substitute(system("date -d '" . date . "' +%Y-%m-%d"), '[\r\n]\+$', '', '')
-    if v:shell_error 
-	echoerr "Invalid date (see `man date`)"
-	return
-    endif
-
     " Compile and check min category dir
     let this_min_dir = notes_dir . "/mins/" . cat . "/"
+    
+ 
+    " If date is latest, look for lateset one
+    if (date == "latest") || (date == "last")
 
-    if !<SID>CheckAndCreateDir(this_min_dir, "Category doesn't exist, create it?")
-	return ""
+	" Assuming ls lists the files alph order and last one is latest cause
+	" of date suffix 
+	let last_file = substitute(system("ls " . this_min_dir ." 2> /dev/null | tail -n1"), '[\r\n]\+$', '', '')
+
+	" Return if we cannot find latest note
+	if last_file == ""
+	    echoerr "Not able to find latest note in that category"
+	    return
+	endif
+
+	" Open last note
+        execute "edit " . this_min_dir . last_file
+
+    else
+
+	" Convert date, exit if not valid
+        let converted_date = substitute(system("date -d '" . date . "' +%Y-%m-%d"), '[\r\n]\+$', '', '')
+        if v:shell_error 
+	   echoerr "Invalid date (see `man date`)"
+	   return
+        endif
+    
+	" Check directory exitence
+	if !<SID>CheckAndCreateDir(this_min_dir, "Category doesn't exist, create it?")
+	   return ""
+        endif
+    
+        " Open new min note
+        execute "edit " . this_min_dir . converted_date . ext
     endif
-
-    " Open new min note
-    execute "edit " . this_min_dir . converted_date . ext
 
 endfunction
 
