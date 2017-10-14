@@ -166,6 +166,62 @@ function! s:OpenRef(title)
 
 endfunction
 
+function! s:GrepMinCat(cat, string, ...)
+
+    " Params
+    let cat = a:cat
+    let string = a:string
+
+    " Config
+    let ext = <SID>GetExt()
+    let notes_dir = <SID>GetNotesDir()
+    if notes_dir == ""
+	return
+    endif
+
+    " Open ref file
+    execute "silent vimgrep! /" . string . '/j ' . notes_dir . "/mins/" . cat . '/*'
+    execute "copen"
+
+endfunction
+
+function! s:GrepMinAll(string)
+
+    " Params
+    let string = a:string
+
+    " Config
+    let ext = <SID>GetExt()
+    let notes_dir = <SID>GetNotesDir()
+    if notes_dir == ""
+	return
+    endif
+
+    " Open ref file
+    execute "silent vimgrep! /" . string . '/j ' . notes_dir . "/mins/*"
+    execute "copen"
+
+endfunction
+
+function! s:GrepRef(string)
+
+    " Params
+    let string = a:string
+
+    " Config
+    let ext = <SID>GetExt()
+    let notes_dir = <SID>GetNotesDir()
+    if notes_dir == ""
+	return
+    endif
+
+    " Open ref file
+    execute "silent vimgrep! /" . string . '/j ' . notes_dir . "/refs/*"
+    execute "copen"
+
+endfunction
+
+
 function! s:ListFU()
     
     " Get directory
@@ -186,3 +242,6 @@ command! -nargs=+ OpenMin call <SID>OpenMin(<f-args>)
 command! -nargs=1 OpenLatestMins call <SID>OpenLatestMins(<f-args>)
 command! -nargs=1 OpenRef call <SID>OpenRef(<f-args>)
 command! -nargs=0 ListFU call <SID>ListFU()
+command! -nargs=+ GrepMinCat call <SID>GrepMinCat(<f-args>)
+command! -nargs=1 GrepMinAll call <SID>GrepMinAll(<f-args>)
+command! -nargs=1 GrepRef call <SID>GrepRef(<f-args>)
